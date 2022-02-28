@@ -56,7 +56,7 @@ def build_packet():
 
 def get_route(hostname):
     timeLeft = TIMEOUT
-    tracelist1 = [] #This is your list to use when iterating through each trace 
+    tracelist1 = [] #This is your list to use when iterating through each trace
     tracelist2 = [] #This is your list to contain all traces
 
     for ttl in range(1,MAX_HOPS):
@@ -95,12 +95,16 @@ def get_route(hostname):
             else:
                 #Fill in start
                 #Fetch the icmp type from the IP packet
+                icmpHeader = recPacket[20:28]
+                type, code, checksum, processID, sequence = struct.unpack("bbHHh", icmpHeader)
                 #Fill in end
                 try: #try to fetch the hostname
                     #Fill in start
+                    hostname = ""
                     #Fill in end
                 except herror:   #if the host does not provide a hostname
                     #Fill in start
+                    hostname = ""
                     #Fill in end
 
                 if types == 11:
@@ -114,7 +118,7 @@ def get_route(hostname):
                     bytes = struct.calcsize("d")
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     #Fill in start
-                    #You should add your responses to your lists here 
+                    #You should add your responses to your lists here
                     #Fill in end
                 elif types == 0:
                     bytes = struct.calcsize("d")
