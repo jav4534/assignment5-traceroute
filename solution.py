@@ -129,6 +129,7 @@ def get_route(hostname):
                 else:
                     #Fill in start
                     #If there is an exception/error to your if statements, you should append that to your list here
+                    x = 0
                     #Fill in end
                 break
             finally:
