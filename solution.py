@@ -86,19 +86,20 @@ def get_route(hostname):
     for ttl in range(1, MAX_HOPS):
         for tries in range(TRIES):
             destAddr = gethostbyname(hostname)
-
+            #print("destAddr: "+destAddr)
             #Fill in start
             # Make a raw socket named mySocket
             icmp = getprotobyname("icmp")
             mySocket = socket(AF_INET, SOCK_RAW, icmp)
             #Fill in end
-
             mySocket.setsockopt(IPPROTO_IP, IP_TTL, struct.pack('I', ttl))
             mySocket.settimeout(TIMEOUT)
             try:
                 d = build_packet()
+                #print("packet:")
+                #print(d)
                 mySocket.sendto(d, (hostname, 0))
-                t= time.time()
+                t = time.time()
                 startedSelect = time.time()
                 whatReady = select.select([mySocket], [], [], timeLeft)
                 howLongInSelect = (time.time() - startedSelect)
@@ -106,6 +107,7 @@ def get_route(hostname):
                     tracelist1.append("* * * Request timed out.")
                     #Fill in start
                     #You should add the list above to your all traces list
+                    tracelist2.append(tracelist1)
                     #Fill in end
                 recvPacket, addr = mySocket.recvfrom(1024)
                 timeReceived = time.time()
@@ -114,6 +116,7 @@ def get_route(hostname):
                     tracelist1.append("* * * Request timed out.")
                     #Fill in start
                     #You should add the list above to your all traces list
+                    tracelist2.append(tracelist1)
                     #Fill in end
             except timeout:
                 continue
@@ -121,40 +124,47 @@ def get_route(hostname):
             else:
                 #Fill in start
                 #Fetch the icmp type from the IP packet
-                icmpHeader = recPacket[20:28]
-                type, code, checksum, processID, sequence = struct.unpack("bbHHh", icmpHeader)
+                icmpHeader = recvPacket[20:28]
+                types, code, checksum, processID, sequence = struct.unpack("bbHHh", icmpHeader)
                 #Fill in end
                 try: #try to fetch the hostname
                     #Fill in start
-                    hostname = ""
+                    hostname = gethostbyaddr(addr[0])[0]
+                    print(hostname)
                     #Fill in end
                 except herror:   #if the host does not provide a hostname
                     #Fill in start
-                    hostname = ""
+                    hostname = "Unresolvable host"
+                    print(hostname)
                     #Fill in end
 
                 if types == 11:
                     bytes = struct.calcsize("d")
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     #Fill in start
-                    #You should add your responses to your lists here
+                    tracelist1.append("* * * Destination network is unreachable for type of service")
+                    tracelist2.append(tracelist1)
                     #Fill in end
                 elif types == 3:
                     bytes = struct.calcsize("d")
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     #Fill in start
                     #You should add your responses to your lists here
+                    tracelist1.append("* * * Destination unreachable")
+                    tracelist2.append(tracelist1)
                     #Fill in end
                 elif types == 0:
                     bytes = struct.calcsize("d")
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     #Fill in start
                     #You should add your responses to your lists here and return your list if your destination IP is met
+                    tracelist1.append(str(timeSent)+" ms")
+                    tracelist2.append(tracelist1)
                     #Fill in end
                 else:
                     #Fill in start
                     #If there is an exception/error to your if statements, you should append that to your list here
-                    x = 0
+                    tracelist2.append("* ")
                     #Fill in end
                 break
             finally:
