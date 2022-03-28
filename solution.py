@@ -191,5 +191,5 @@ def get_route(hostname):
     return tracelist2
 
 if __name__ == '__main__':
-    print(get_route("google.co.il"))
-    #get_route("google.co.il")
+    #print(get_route("google.co.il"))
+    get_route("google.co.il")
