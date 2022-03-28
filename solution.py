@@ -142,7 +142,7 @@ def get_route(hostname):
                     bytes = struct.calcsize("d")
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     #Fill in start
-                    tracelist1.append(tries)
+                    tracelist1.append("%d")
                     tracelist1.append(str(timeSent)+"ms")
                     tracelist1.append(hostname)
                     tracelist1.append("* * * Destination network is unreachable for type of service")
@@ -153,7 +153,7 @@ def get_route(hostname):
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     #Fill in start
                     #You should add your responses to your lists here
-                    tracelist1.append(tries)
+                    tracelist1.append("%d")
                     tracelist1.append(str(timeSent)+"ms")
                     tracelist1.append(hostname)
                     tracelist1.append("* * * Destination unreachable")
@@ -164,7 +164,7 @@ def get_route(hostname):
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     #Fill in start
                     #You should add your responses to your lists here and return your list if your destination IP is met
-                    tracelist1.append(tries)
+                    tracelist1.append("%d")
                     tracelist1.append(str(timeSent)+"ms")
                     tracelist1.append(hostname)
                     tracelist2.append(tracelist1)
