@@ -106,7 +106,8 @@ def get_route(hostname):
                 howLongInSelect = (time.time() - startedSelect)
                 if whatReady[0] == []: # Timeout
                     tracelist1.append(str(ttl))
-                    tracelist1.append("* * * Request timed out.")
+                    tracelist1.append("*")
+                    tracelist1.append("Request timed out.")
                     #Fill in start
                     #You should add the list above to your all traces list
                     tracelist2.append(tracelist1)
@@ -116,7 +117,8 @@ def get_route(hostname):
                 timeLeft = timeLeft - howLongInSelect
                 if timeLeft <= 0:
                     tracelist1.append(str(ttl))
-                    tracelist1.append("* * * Request timed out.")
+                    tracelist1.append("*")
+                    tracelist1.append("Request timed out.")
                     #Fill in start
                     #You should add the list above to your all traces list
                     tracelist2.append(tracelist1)
@@ -145,12 +147,12 @@ def get_route(hostname):
                     bytes = struct.calcsize("d")
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     #Fill in start
-                    rtt = round(((timeReceived - timeSent) * 1000) ,2)
+                    rtt = round(((timeReceived - t) * 1000) ,2)
                     tracelist1.append(str(ttl))
                     tracelist1.append(str(rtt)+" ms")
                     tracelist1.append(addr[0])
                     tracelist1.append(hostname)
-                    tracelist1.append("* * * Destination network is unreachable for type of service")
+                    #tracelist1.append("*Destination network is unreachable for type of service")
                     tracelist2.append(tracelist1)
                     #Fill in end
                 elif types == 3:
@@ -158,12 +160,12 @@ def get_route(hostname):
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     #Fill in start
                     #You should add your responses to your lists here
-                    rtt = round(((timeReceived - timeSent) * 1000) ,2)
+                    rtt = round(((timeReceived - t) * 1000) ,2)
                     tracelist1.append(str(ttl))
                     tracelist1.append(str(rtt)+" ms")
                     tracelist1.append(addr[0])
                     tracelist1.append(hostname)
-                    tracelist1.append("* * * Destination unreachable")
+                    #tracelist1.append("* * * Destination unreachable")
                     tracelist2.append(tracelist1)
                     #Fill in end
                 elif types == 0:
