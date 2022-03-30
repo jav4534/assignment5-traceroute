@@ -119,6 +119,11 @@ def get_route(hostname):
             else:
                 #Fill in start
                 #Fetch the icmp type from the IP packet
+                ipHeader = struct.unpack("!BBHHHBBHBBBBBBBB", recvPacket[:20])
+                #ip_src = '.'.join(map(str, ipHeader[8]))  # 10.20.1.13
+                #ip_dst = '.'.join(map(str, ipHeader[9]))  # 1.1.1.1
+                #print(ip_src)
+                #print(ip_dst)
                 icmpHeader = recvPacket[20:28]
                 types, code, checksum, processID, sequence = struct.unpack("bbHHh", icmpHeader)
                 #print(icmpHeader)
@@ -130,12 +135,12 @@ def get_route(hostname):
                 #Fill in end
                 try: #try to fetch the hostname
                     #Fill in start
-                    hostname = gethostbyaddr(addr[0])[0]
+                    hostN = gethostbyaddr(addr[0])[0]
                     #print(hostname)
                     #Fill in end
                 except herror:   #if the host does not provide a hostname
                     #Fill in start
-                    hostname = "Hostname not returnable"
+                    hostN = "Hostname not returnable"
                     #print(hostname)
                     #Fill in end
                 if types == 11:
@@ -146,7 +151,7 @@ def get_route(hostname):
                     tracelist1.append(str(ttl))
                     tracelist1.append(str(rtt)+" ms")
                     tracelist1.append(addr[0])
-                    tracelist1.append(hostname)
+                    tracelist1.append(hostN)
                     #tracelist1.append("*Destination network is unreachable for type of service")
                     tracelist2.append(tracelist1)
                     #Fill in end
@@ -159,7 +164,7 @@ def get_route(hostname):
                     tracelist1.append(str(ttl))
                     tracelist1.append(str(rtt)+" ms")
                     tracelist1.append(addr[0])
-                    tracelist1.append(hostname)
+                    tracelist1.append(hostN)
                     #tracelist1.append("* * * Destination unreachable")
                     tracelist2.append(tracelist1)
                     #Fill in end
@@ -168,29 +173,29 @@ def get_route(hostname):
                     timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     #Fill in start
                     #You should add your responses to your lists here and return your list if your destination IP is met
-                    rtt = round(((timeReceived - timeSent) * 1000) ,2)
+                    rtt = round(((timeReceived - t) * 1000) ,2)
                     tracelist1.append(str(ttl))
                     tracelist1.append(str(rtt)+" ms")
                     tracelist1.append(addr[0])
-                    tracelist1.append(hostname)
+                    tracelist1.append(hostN)
                     tracelist2.append(tracelist1)
                     #print("destAddr: "+destAddr)
                     #print("returnAddr: "+addr[0])
-                    if(destAddr == addr[0]):
+                    #print(hostN)
+                    #if(destAddr == addr[0]):
                         #print("done!")
-                        return tracelist2
-                    else:
-                        continue
+                    return tracelist2
+                    #else:
+                    #    continue
                     #Fill in end
                 else:
                     #Fill in start
                     #If there is an exception/error to your if statements, you should append that to your list here
                     tracelist2.append("error")
                     #Fill in end
-                    break
+                break
             finally:
                 mySocket.close()
-                break
     return tracelist2
 
 if __name__ == '__main__':
