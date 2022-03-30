@@ -115,7 +115,6 @@ def get_route(hostname):
                     #Fill in end
             except timeout:
                 continue
-
             else:
                 #Fill in start
                 #Fetch the icmp type from the IP packet
@@ -136,12 +135,12 @@ def get_route(hostname):
                 try: #try to fetch the hostname
                     #Fill in start
                     hostN = gethostbyaddr(addr[0])[0]
-                    #print(hostname)
+                    #print(hostN)
                     #Fill in end
                 except herror:   #if the host does not provide a hostname
                     #Fill in start
-                    hostN = "Hostname not returnable"
-                    #print(hostname)
+                    hostN = "hostname not returnable"
+                    #print(hostN)
                     #Fill in end
                 if types == 11:
                     bytes = struct.calcsize("d")
